@@ -13,6 +13,6 @@
 -> Display output of the program on LED Matrix  
 
 ## Authors:
-Jakub Słota
+Jakub Słota  
 Jakub Pyznar: https://gitlab.com/JakubPyznar  
 
