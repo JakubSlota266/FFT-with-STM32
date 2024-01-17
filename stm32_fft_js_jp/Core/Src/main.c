@@ -64,34 +64,23 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-volatile int16_t temp_data = 0;
-volatile int16_t temp_data_L = 0;
-volatile int16_t temp_data_R = 0;
+static volatile int16_t temp_data = 0;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
-	static bool toggle_channel;
 	static int16_t temp_data_filt = 0;
 
 	if (htim == &htim6)
 	{
 		WM8731_RecieveData((uint16_t *)&temp_data);
-		temp_data_filt += ((int16_t)temp_data - temp_data_filt)/2;
-		if (toggle_channel)
-		{
-			temp_data_L = temp_data;
-		}
-		else
-		{
-			temp_data_R = temp_data;
-		}
-		FFT_update_buffer((float)temp_data_filt);
-		toggle_channel = !toggle_channel;
+		temp_data_filt = FFT_apply_filter(temp_data);
+		FFT_update_buffer(temp_data_filt);
 	}
 	else if (htim == &htim10)
 	{
-		//MAX7219_SetAllDigits(MAX7219_OFF);
-		//MAX7219_Display();
+		/* Matryca LED wymaga zewnetrznego zasilania, poniewaz skokowe zmiany pradu zaburzaja Vref dla ADC kodeka */
+		MAX7219_SetAllDigits(MAX7219_OFF);
+		MAX7219_Display();
 	}
 }
 
@@ -122,8 +111,6 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-
 
   /* USER CODE BEGIN Init */
 

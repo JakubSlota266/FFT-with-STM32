@@ -1,0 +1,3 @@
+Zdjecie 1 - mixed sinus z matlaba 4k + 12k + 16k
+Zdjecie 2 - mixed sinus z matlaba 4k + 12k
+Zdjecie 3,4 - brak dźwieku, wersja bez filtra i z medianowym
